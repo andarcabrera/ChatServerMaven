@@ -1,0 +1,75 @@
+import Interfaces.InputStream;
+import Interfaces.OutputStream;
+import Interfaces.StreamMgmt;
+
+import java.io.IOException;
+
+/**
+ * Created by andacabrera29 on 2/23/16.
+ */
+public class HandleUserThread implements Runnable{
+    private InputStream input;
+    private OutputStream output;
+    private StreamMgmt outputStreams;
+    private Bots bots = new Bots();
+    private String name;
+
+    public HandleUserThread(InputStream inputStream, OutputStream outputStream, StreamMgmt outputStreams) {
+        this.input = inputStream;
+        this.output = outputStream;
+        this.outputStreams = outputStreams;
+    }
+
+    public synchronized String readMessage() {
+        String message = input.readMessage();
+        return message;
+    }
+
+    private synchronized void writeMessage(String message) {
+        output.writeMessage(message);
+    }
+
+    private synchronized void transmitMessage(String message) {
+        try {
+            outputStreams.transmitMessage(message);
+        } catch (IOException e1) {
+            System.out.println("Cathing interrupted exception in transmitMessage");
+        }
+    }
+
+
+    public synchronized void run() {
+
+        while (true) {
+            String welcome = ("Welcome to the chatroom. Please enter a username");
+            writeMessage(welcome);
+
+            String userName = "Please enter a user name! Pretty please...";
+            name = readMessage();
+
+            if (name == null || name.isEmpty()) {
+                writeMessage(userName);
+            } else if (name.contains("lex")) {
+                writeMessage("Romanians need to go through extra security\n JK");
+                transmitMessage(name + " has joined the chat.");
+                break;
+            } else {
+                transmitMessage(name + " has joined the chat.");
+                break;
+            }
+        }
+
+        String messageFromUser;
+        while (((messageFromUser = readMessage())) != null) {
+            transmitMessage(name + ": " + messageFromUser);
+            String messageFromServer = bots.handleRequest(messageFromUser);
+            if (messageFromServer != null) {
+                transmitMessage(messageFromServer);
+            }
+
+        }
+
+        transmitMessage(name + " left the chat!");
+        outputStreams.unregisterOutputStream(output);
+    }
+}
