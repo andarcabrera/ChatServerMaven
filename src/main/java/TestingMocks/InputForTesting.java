@@ -1,21 +1,22 @@
 package TestingMocks;
 
+import Interfaces.InputStream;
+
 import java.util.ArrayList;
-import java.util.Arrays;
 
 /**
  * Created by andacabrera29 on 2/23/16.
  */
-public class InputForTesting {
+public class InputForTesting implements InputStream{
     ArrayList<String> incomingMessages = new ArrayList<String>();
 
-    public synchronized String readMessage() {
+    public String readMessage() {
         String message;
-        if (incomingMessages.size() == 1) {
+        if (incomingMessages.size() > 0) {
             message = incomingMessages.get(0);
             incomingMessages.remove(0);
         } else {
-            message = "";
+            message = null;
         }
         return message;
     }
@@ -26,7 +27,7 @@ public class InputForTesting {
         }
     }
 
-    public synchronized void addInputs(String... a) {
-        incomingMessages.addAll(Arrays.asList(a));
+    public synchronized void addInput(String a) {
+        incomingMessages.add(a);
     }
 }

@@ -25,7 +25,7 @@ public class MathProtocolTest {
 
     @Test
     public void testOperationWithNumbers() {
-        assertEquals("2", mp.process("MATH:1 + 1"));
+        assertEquals("3", mp.process("MATH:1 + 1"));
         assertEquals("3", mp.process("MATH:1 + 2"));
         assertEquals("4", mp.process("MATH:2 * 2"));
         assertEquals("8", mp.process("MATH:2 + 2 *2"));

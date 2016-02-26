@@ -1,11 +1,13 @@
 package TestingMocks;
 
+import Interfaces.OutputStream;
+
 import java.util.ArrayList;
 
 /**
  * Created by andacabrera29 on 2/23/16.
  */
-public class OutputForTesting {
+public class OutputForTesting implements OutputStream{
     private ArrayList<String> messagesFromServer = new ArrayList<String>();
 
     public void writeMessage(String message) {
@@ -16,6 +18,7 @@ public class OutputForTesting {
         String message;
         if (messagesFromServer.size() >= 1) {
             message = messagesFromServer.get(position);
+            messagesFromServer.remove(position);
         } else {
             message = "Nothin'";
         }

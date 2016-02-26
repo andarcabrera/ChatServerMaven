@@ -40,6 +40,7 @@ public class HandleUserThread implements Runnable{
 
     public synchronized void run() {
 
+        String name = "";
         while (true) {
             String welcome = ("Welcome to the chatroom. Please enter a username");
             writeMessage(welcome);
